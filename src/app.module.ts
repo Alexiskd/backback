@@ -25,7 +25,7 @@ import { join } from 'path';
     // Configuration directe de TypeORM
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'dpg-cuec3352ng1s7387587g-a', // Hôte de la base de données
+      host: process.env.DB_HOST || 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice', // Hôte de la base de données
       port: parseInt(process.env.DB_PORT, 10) || 5432, // Port PostgreSQL
       username: process.env.DB_USERNAME || 'cleservice_user', // Nom d'utilisateur
       password: process.env.DB_PASSWORD || 'LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS', // Mot de passe
