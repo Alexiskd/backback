@@ -25,15 +25,12 @@ import { join } from 'path';
     // Configuration directe de TypeORM
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice', // Hôte de la base de données
-      port: parseInt(process.env.DB_PORT, 10) || 5432, // Port PostgreSQL
-      username: process.env.DB_USERNAME || 'cleservice_user', // Nom d'utilisateur
-      password: process.env.DB_PASSWORD || 'LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS', // Mot de passe
-      database: process.env.DB_DATABASE || 'cleservice', // Nom de la base de données
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Chargement des entités
-      migrations: [__dirname + '/migrations/**/*{.ts,.js}'], // Inclure les migrations
-      synchronize: process.env.NODE_ENV === 'production' ? false : true, // Synchronisation désactivée en production
-      logging: process.env.NODE_ENV !== 'production', // Logs activés seulement hors production
+      url: 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice', // Utilise l'URL complète de la base de données
+      autoLoadEntities: true,
+      synchronize: true, // À utiliser avec précaution en production
+      ssl: {
+        rejectUnauthorized: false, // Nécessaire pour certaines configurations SSL
+      },
     }),
     MailModule, // Ajouter MailModule ici
     UserModule,
