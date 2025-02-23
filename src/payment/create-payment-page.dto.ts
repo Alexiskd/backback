@@ -1,8 +1,8 @@
-import { IsString, IsNumber, IsNotEmpty, IsUrl } from 'class-validator';
+import { IsString, IsNumber, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePaymentPageDto {
-  @ApiProperty({ example: 1000, description: 'Montant en centimes' })
+  @ApiProperty({ example: 100, description: 'Montant en centimes (100 = 1€)' })
   @IsNumber()
   amount: number;
 
@@ -10,11 +10,15 @@ export class CreatePaymentPageDto {
   @IsString()
   currency: string;
 
-  @ApiProperty({ example: 'Achat de produit XYZ' })
+  @ApiProperty({ example: 'Paiement de 1€', description: 'Description de la transaction' })
   @IsString()
   description: string;
 
-  @ApiProperty({ example: 'https://http://localhost:5173/payment-result' })
-  @IsUrl({ require_tld: true }) // Requiert une URL valide
-  return_url: string;
+  @ApiProperty({ example: 'https://votresite.com/success', description: 'URL de redirection en cas de succès' })
+  @IsUrl({ require_tld: false })
+  success_url: string;
+
+  @ApiProperty({ example: 'https://votresite.com/cancel', description: 'URL de redirection en cas d\'annulation' })
+  @IsUrl({ require_tld: false })
+  cancel_url: string;
 }

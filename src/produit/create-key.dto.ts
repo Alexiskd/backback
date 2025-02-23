@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsBoolean, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsNumber, IsOptional, IsEnum } from 'class-validator';
+
+export enum TypeReproduction {
+  COPIE = 'copie',
+  NUMERO = 'numero',
+  IA = 'ia',
+}
 
 export class CreateKeyDto {
   @IsString()
@@ -15,7 +21,36 @@ export class CreateKeyDto {
   @IsBoolean()
   cleAvecCartePropriete: boolean;
 
+  @IsNumber()
+  @IsOptional()
+  prixSansCartePropriete?: number;
+
   @IsString()
   @IsOptional()
   imageUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  referenceEbauche?: string;
+
+  @IsEnum(TypeReproduction)
+  @IsNotEmpty()
+  typeReproduction: TypeReproduction;
+
+  @IsString()
+  @IsOptional()
+  descriptionNumero?: string;
+
+  // Nouveau champ : description générale du produit
+  @IsString()
+  @IsOptional()
+  descriptionProduit?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  estCleAPasse?: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  prixCleAPasse?: number;
 }

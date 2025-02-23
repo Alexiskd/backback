@@ -1,42 +1,70 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { ServeStaticModule, ServeStaticModuleOptions } from '@nestjs/serve-static';
+import { join } from 'path';
+
+import appConfig from './app.config';
+import mailConfig from './mailer/mail.config';
+
+import { MailModule } from './mailer/mail.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { MailModule } from './mailer/mail.module'; // Importer MailModule
-import { ConfigModule } from '@nestjs/config';
-import mailConfig from './mailer/mail.config';
-import appConfig from './app.config';
-import { StancerModule } from './payment/stancer.module'; // Import StancerModule
-import { ProduitModule } from './produit/produit.module'; // Importer ProduitModule
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { ProduitModule } from './produit/produit.module';
+import { StripeModule } from './payment/stripe.module';
+import { CommandeModule } from './commande/commande.module';
+import { ShippingDocketModule } from './collisimo/shipping-docket.module';
+import { ContactMessagesModule } from './contact/contact-messages.module';
+import { BrandModule } from './marque/brand.module';
+import { SeoModule } from './seo/seo.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'), // Chemin vers le dossier 'public'
-      serveRoot: '/public/', // URL de base pour accéder aux fichiers statiques
-    }),
+    // Chargement global des variables d'environnement
     ConfigModule.forRoot({
-      isGlobal: true, // Rendre le module de configuration global
-      load: [appConfig, mailConfig], // Charger les fichiers de configuration
-      envFilePath: ['.env'], // Chemin vers votre fichier .env
+      isGlobal: true,
+      load: [appConfig, mailConfig],
+      envFilePath: ['.env'],
     }),
-    // Configuration directe de TypeORM
+
+    // ServeStaticModule : configuration pour servir les fichiers statiques
+    ServeStaticModule.forRootAsync({
+      useFactory: (): ServeStaticModuleOptions[] => [
+        {
+          rootPath: join(__dirname, '..', 'public'),
+          serveRoot: '/public',
+        },
+        {
+          // Ici, __dirname correspond au dossier "dist", on utilise donc directement "uploads"
+          rootPath: join(__dirname, 'uploads'),
+          serveRoot: '/uploads',
+          serveStaticOptions: { index: false },
+        },
+      ],
+    }),
+
+    // Configuration de la connexion à la base de données
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice', // Utilise l'URL complète de la base de données
+      url: 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice',
       autoLoadEntities: true,
-      synchronize: true, // À utiliser avec précaution en production
-      ssl: {
-        rejectUnauthorized: false, // Nécessaire pour certaines configurations SSL
-      },
+      synchronize: false,
+      ssl: { rejectUnauthorized: false },
     }),
-    MailModule, // Ajouter MailModule ici
+
+    // Importation des modules applicatifs
+    MailModule,
     UserModule,
     AuthModule,
-    ProduitModule, // Ajouter ProduitModule ici
-    StancerModule, // Ajouter StancerModule ici
+    ProduitModule,
+    StripeModule,
+    CommandeModule,
+    ShippingDocketModule,
+    ContactMessagesModule,
+    BrandModule,
+    SeoModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
