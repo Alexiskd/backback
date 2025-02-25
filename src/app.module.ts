@@ -22,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     // Chargement global des variables d'environnement
     ConfigModule.forRoot({
+      
       isGlobal: true,
       load: [appConfig, mailConfig],
       envFilePath: ['.env'],
