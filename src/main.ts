@@ -1,16 +1,15 @@
-// main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { LoggingInterceptor } from './logging.interceptor'; // Import de l'intercepteur
-import { json, urlencoded } from 'express'; // Utilisation des middlewares Express
+import { LoggingInterceptor } from './logging.interceptor';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
 
-  // Augmentation de la limite de taille pour les requêtes JSON et urlencoded
+  // Augmenter la limite de taille pour les requêtes JSON et urlencoded
   app.use(json({ limit: '10mb' }));
   app.use(urlencoded({ limit: '10mb', extended: true }));
 
@@ -25,9 +24,9 @@ async function bootstrap() {
   // Utilisation d'un ValidationPipe global
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,               // Supprime automatiquement les propriétés non déclarées dans le DTO
-      forbidNonWhitelisted: true,    // Lève une erreur si une propriété non déclarée est présente
-      transform: true,               // Transforme automatiquement le payload en instance du DTO
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
@@ -44,8 +43,9 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
-  logger.log(`Application running on http://localhost:${port}`);
+  // Écouter sur le port défini et sur l'adresse 0.0.0.0 pour être accessible depuis l'extérieur
+  await app.listen(port, '0.0.0.0');
+  logger.log(`Application running on port ${port}`);
 }
 
 bootstrap();
