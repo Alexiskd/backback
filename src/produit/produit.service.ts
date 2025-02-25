@@ -33,11 +33,15 @@ export class ProduitService {
         'prixSansCartePropriete',
         'cleAvecCartePropriete',
         'imageUrl',
-        'referenceEbauche', // Ajout de la référence ébauche
+        'referenceEbauche',
         'typeReproduction',
         'descriptionNumero',
         'estCleAPasse',
         'prixCleAPasse',
+        // =================== Nouveaux champs ===================
+        'besoinPhoto',
+        'besoinNumeroCle',
+        'besoinNumeroCarte',
       ],
       where: { marque },
     });
@@ -120,11 +124,15 @@ export class ProduitService {
         'prixSansCartePropriete',
         'cleAvecCartePropriete',
         'imageUrl',
-        'referenceEbauche', // Ajout de la référence ébauche
+        'referenceEbauche',
         'typeReproduction',
         'descriptionNumero',
         'estCleAPasse',
         'prixCleAPasse',
+        // =================== Nouveaux champs ===================
+        'besoinPhoto',
+        'besoinNumeroCle',
+        'besoinNumeroCarte',
       ],
       take: limit,
       skip: skip,

@@ -62,12 +62,16 @@ export class ProduitController {
       imageUrl: newKey.imageUrl ?? '',
       prixSansCartePropriete: newKey.prixSansCartePropriete ?? 0,
       referenceEbauche: newKey.referenceEbauche?.trim() || null,
-      // Nouveaux champs
+      // Nouveaux champs existants
       typeReproduction: newKey.typeReproduction,
       descriptionNumero: newKey.descriptionNumero ?? '',
       descriptionProduit: newKey.descriptionProduit ?? '',
       estCleAPasse: newKey.estCleAPasse ?? false,
       prixCleAPasse: newKey.prixCleAPasse ?? null,
+      // ===================== Nouveaux champs =====================
+      besoinPhoto: newKey.besoinPhoto ?? false,
+      besoinNumeroCle: newKey.besoinNumeroCle ?? false,
+      besoinNumeroCarte: newKey.besoinNumeroCarte ?? false,
     };
     this.logger.log(`Requête POST reçue pour ajouter la clé: ${JSON.stringify(keyToAdd)}`);
     return this.produitService.addKey(keyToAdd);
@@ -85,12 +89,16 @@ export class ProduitController {
       imageUrl: newKey.imageUrl ?? '',
       prixSansCartePropriete: newKey.prixSansCartePropriete ?? 0,
       referenceEbauche: newKey.referenceEbauche?.trim() || null,
-      // Nouveaux champs
+      // Nouveaux champs existants
       typeReproduction: newKey.typeReproduction,
       descriptionNumero: newKey.descriptionNumero ?? '',
       descriptionProduit: newKey.descriptionProduit ?? '',
       estCleAPasse: newKey.estCleAPasse ?? false,
       prixCleAPasse: newKey.prixCleAPasse ?? null,
+      // ===================== Nouveaux champs =====================
+      besoinPhoto: newKey.besoinPhoto ?? false,
+      besoinNumeroCle: newKey.besoinNumeroCle ?? false,
+      besoinNumeroCarte: newKey.besoinNumeroCarte ?? false,
     }));
     this.logger.log(`Requête POST reçue pour ajouter ${keysToAdd.length} clés.`);
     return this.produitService.addKeys(keysToAdd);

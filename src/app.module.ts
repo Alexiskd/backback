@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule, ServeStaticModuleOptions } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -16,8 +15,8 @@ import { CommandeModule } from './commande/commande.module';
 import { ShippingDocketModule } from './collisimo/shipping-docket.module';
 import { ContactMessagesModule } from './contact/contact-messages.module';
 import { BrandModule } from './marque/brand.module';
-import { SeoModule } from './seo/seo.module';
 import { UploadModule } from './upload/upload.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -36,7 +35,6 @@ import { UploadModule } from './upload/upload.module';
           serveRoot: '/public',
         },
         {
-          // Ici, __dirname correspond au dossier "dist", on utilise donc directement "uploads"
           rootPath: join(__dirname, 'uploads'),
           serveRoot: '/uploads',
           serveStaticOptions: { index: false },
@@ -45,6 +43,7 @@ import { UploadModule } from './upload/upload.module';
     }),
 
     // Configuration de la connexion à la base de données
+    // (Les informations de connexion restent inchangées)
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: 'postgresql://cleservice_user:LUWibq2Mqj4yqZnuQgZhBGk8exqGSIvS@dpg-cuec3352ng1s7387587g-a.oregon-postgres.render.com/cleservice',
@@ -63,7 +62,6 @@ import { UploadModule } from './upload/upload.module';
     ShippingDocketModule,
     ContactMessagesModule,
     BrandModule,
-    SeoModule,
     UploadModule,
   ],
 })

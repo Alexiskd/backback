@@ -50,4 +50,17 @@ export class CatalogueCle {
   // Champ existant : prix de la clé en mode passe
   @Column('decimal', { nullable: true })
   prixCleAPasse: number;
+
+  // ===================== Nouveaux champs =====================
+  // Indique si des photos sont requises pour le produit
+  @Column({ default: false })
+  besoinPhoto: boolean;
+
+  // Indique si le numéro de clé est requis
+  @Column({ default: false })
+  besoinNumeroCle: boolean;
+
+  // Indique si le numéro de carte est requis
+  @Column({ default: false })
+  besoinNumeroCarte: boolean;
 }

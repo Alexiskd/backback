@@ -4,18 +4,15 @@ import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggingInterceptor } from './logging.interceptor'; // Import de l'intercepteur
-
-// Ne pas importer body-parser pour les routes multipart, NestJS s'en charge déjà
+import { json, urlencoded } from 'express'; // Utilisation des middlewares Express
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
 
-  // Remarque : body-parser n'est pas utilisé ici car il peut interférer avec les uploads multipart/form-data (gérés par Multer)
-  /*
-  app.use(bodyParser.json({ limit: '10mb' }));
-  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-  */
+  // Augmentation de la limite de taille pour les requêtes JSON et urlencoded
+  app.use(json({ limit: '10mb' }));
+  app.use(urlencoded({ limit: '10mb', extended: true }));
 
   // Activer CORS en autorisant les méthodes nécessaires, y compris PATCH et OPTIONS
   app.enableCors({
@@ -26,12 +23,10 @@ async function bootstrap() {
   });
 
   // Utilisation d'un ValidationPipe global
-  // Pour déboguer l'erreur "property nom should not exist", vous pouvez temporairement mettre forbidNonWhitelisted à false,
-  // mais il est préférable de corriger vos DTO afin qu'ils correspondent exactement aux propriétés attendues.
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,               // Supprime automatiquement les propriétés non déclarées dans le DTO
-      forbidNonWhitelisted: true,    // Lève une erreur si une propriété non déclarée est présente (à désactiver temporairement pour le débogage si nécessaire)
+      forbidNonWhitelisted: true,    // Lève une erreur si une propriété non déclarée est présente
       transform: true,               // Transforme automatiquement le payload en instance du DTO
     }),
   );
